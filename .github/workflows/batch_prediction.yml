@@ -22,14 +22,16 @@ jobs:
         with:
           python-version: 3.11
       - name: Install poetry
-        run: curl -sSL https://install.python-poetry.org | python3 -
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: false
+          virtualenvs-in-project: false
+          installer-parallel: true
       - name: Daily prediction job
         if: github.event.schedule == '0 0 * * *'
         run: |
-          source $(poetry env info --path)/bin/activate
           bash scripts/run_workflow.bash prod population
       - name: Hourly prediction job
         if: github.event.schedule == '0 */2 * * *'
         run: |
-          source $(poetry env info --path)/bin/activate
           bash scripts/run_workflow.bash prod personalised

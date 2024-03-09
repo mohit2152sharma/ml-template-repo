@@ -17,10 +17,13 @@ jobs:
         with:
           python-version: 3.11
       - name: Install poetry
-        run: curl -sSL https://install.python-poetry.org | python3 -
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: false
+          virtualenvs-in-project: false
+          installer-parallel: true
       - name: Run pytest
         run: |
-          source $(poetry env info --path)/bin/activate
           poetry install --with tests
           pytest -s --verbose
   prod:
