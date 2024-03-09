@@ -14,7 +14,7 @@ async def read_sentence(
     """Takes the clientid and returns the prediction
 
     Args:
-        clientid: user information required for authentication
+        clientid: user information
     Returns:
         A Dictionary with user information and prediction
     """
