@@ -2,6 +2,8 @@
 
 I have included the answers for the questions within the readme file. While working on the workflow, I have tried to keep the things simple and easy. The overall design of the architecture will depend on the existing tech stack and complexity of the system. If there are multiple models and they are interdendent on each other and runs on different schedule, it would make sense to use an orchestration tool and model metadata storage service.
 
+In the repo, I have also included a cicd pipeline setup. This pipeline gets triggered on every push to the main branch. And then builds a docker image, pushes it to image repository and then deploys the application service to the kubernetes cluster. The code included is for a very simple app, but it can be configured accordingly depending on scale and complexity. For example, you may have different environments like testing, staging and production. To deploy the service to these environments, we just need to add an extra `jobs` step in `deploy.yaml` file. It can even be configured in a manner that when code gets merged into `release/*` branch, it deploys to `staging` environment, when code gets merged to `develop` branch, it deploys to `test` environment etc etc.
+
 - [x] Create a new repo. with all the bells &amp; whistles to handle modern ML model development, deployment and serving. You can use any cookiecutter template or build your own.
     - I have created a cookiecutter template, available [here](https://github.com/mohit2152sharma/cookiecutter-ml)
 - [x] Decorator for logging and time profiling
