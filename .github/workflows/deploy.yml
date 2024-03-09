@@ -1,0 +1,45 @@
+name: "Deploy model to cloud"
+on: 
+  push:
+    branches:
+      - main
+      - "*"
+  workflow_dispatch:
+jobs:
+  tests: 
+    name: Run pytest
+    runs-on: ubuntu-latest 
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+      - name: Run pytest
+        run: |
+          source $(poetry env info --path)/bin/activate
+          poetry install --with tests
+          pytest -s --verbose
+  prod:
+    name: Deploy model to cloud
+    runs-on: ubuntu-latest
+    if: github.branch == 'main'
+    needs: tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Build Docker Image
+        run: docker build -t ecrRepositoryUrl/model:latest -f Dockerfile
+      - name: Push Docker image to ecr
+        run: docker push ecrRepositoryUrl/model:latest
+      - name: Deploy application to kubernetes cluster
+        run: kubectl apply -f pod.yml

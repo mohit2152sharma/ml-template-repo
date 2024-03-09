@@ -1,0 +1,35 @@
+name: Batch prediction job
+on:
+  schedule:
+    # run this job once a day
+    - cron: "0 0 * * *"
+    # run this job every two hours
+    - cron: "0 */2 * * *"
+  # for running job manually
+  workflow_dispatch:
+
+jobs:
+  batch_prediction_job:
+    name: Batch prediction job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+      - name: Daily prediction job
+        if: github.event.schedule == '0 0 * * *'
+        run: |
+          source $(poetry env info --path)/bin/activate
+          bash scripts/run_workflow.bash prod population
+      - name: Hourly prediction job
+        if: github.event.schedule == '0 */2 * * *'
+        run: |
+          source $(poetry env info --path)/bin/activate
+          bash scripts/run_workflow.bash prod personalised
