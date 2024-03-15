@@ -14,7 +14,7 @@ In the repo, I have also included a cicd pipeline setup. This pipeline gets trig
 - [x] Shell script to identify all the added notebook files, run them, export them as HTMLs, and then strip them of their output
     - The shell script is available at `./scripts/notebook_to_html.bash`
 - [x] Pre-commit hook that will run the above bash script
-    - The instructions for setting it up as 
+    - The instructions for setting it up as a pre-commit hook are mentioned within the file. 
 - [x] Implement workflow for both the model’s batch training. The workflow should be runnable both on local machine and cloud dev. and prod environments with a simple config change
     - I have created a script file `./scripts/run_workflow.bash`
     - The script takes in two input parameters the environment and the model name and accordingly runs the pipeline.
